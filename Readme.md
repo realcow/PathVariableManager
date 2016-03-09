@@ -12,7 +12,7 @@
     > pvm del python2
     
     :: python3 디렉토리를 등록
-    > pvm reg python3 "C:\Program Files\Python3"
+    > pvm --register python3 "C:\Program Files\Python3"
 
     :: 현재 패쓰 변수에 python3 경로 추가
     > pvm add python3
