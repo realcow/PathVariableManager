@@ -19,7 +19,7 @@ int main(int argc, char** argv)
     
     namespace po = boost::program_options;
     po::options_description desc("Allowed options");
-    const char* kRegisterCommand = "register";
+    const char* kRegisterCommand = "reg";
     const char* kSetCommand = "set";
     const char* kListCommand = "list";
     desc.add_options()
