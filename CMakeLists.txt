@@ -39,3 +39,7 @@ add_library(yaml-cpp STATIC IMPORTED)
 set_property(TARGET yaml-cpp PROPERTY IMPORTED_LOCATION ${install_dir}/lib/libyaml-cppmd.lib) #TODO: library filename is changed depending on toolset
 link_directories(PathVariableManager ${binary_dir})
 target_link_libraries(PathVariableManager yaml-cpp)
+
+# install rules
+install(TARGETS PathVariableManager RUNTIME DESTINATION .)
+install(FILES pvm.bat DESTINATION .)
