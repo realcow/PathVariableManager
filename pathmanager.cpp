@@ -61,3 +61,21 @@ bool PathManager::registerPath(const std::string& name, const std::string& path)
     entries_.push_back({name, {path}});
     return true;
 }
+
+boost::optional<std::string> PathManager::getPathByName(const std::string & name)
+{
+    for (auto& e : entries_)
+    {
+        if (e.name == name)
+        {
+            string s;
+            for (string& path : e.pathes)
+            {
+                s += path + ";";
+            }
+            s.pop_back();
+            return s;
+        }
+    }
+    return{};
+}
