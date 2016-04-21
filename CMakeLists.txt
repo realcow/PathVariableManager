@@ -2,7 +2,10 @@ cmake_minimum_required(VERSION 3.2 FATAL_ERROR)
 
 project(PathVariableManager)
 
-add_executable(PathVariableManager main.cpp Readme.md)
+add_executable(PathVariableManager 
+    pathmanager.h pathmanager.cpp
+    main.cpp 
+    Readme.md)
 if(MSVC)
   # make it use static runtime
   #foreach(config_name  ""  DEBUG  RELEASE  MINSIZEREL  RELWITHDEBINFO)
@@ -24,7 +27,7 @@ target_link_libraries(PathVariableManager ${Boost_LIBRARIES})
 include(ExternalProject)
 ExternalProject_Add(yamlcpp
     PREFIX ${CMAKE_BINARY_DIR}/thirdparty
-    GIT_REPOSITORY "D:/git/yaml-cpp-source/.git"
+    GIT_REPOSITORY "https://github.com/jbeder/yaml-cpp.git"
     GIT_TAG release-0.5.3
     CMAKE_ARGS -DMSVC_SHARED_RT=on -DCMAKE_INSTALL_PREFIX=${CMAKE_CURRENT_BINARY_DIR}/yamlcpp
     INSTALL_DIR ${CMAKE_CURRENT_BINARY_DIR}/yamlcpp
