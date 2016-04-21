@@ -28,17 +28,32 @@ int main(int argc, char** argv)
         (kListCommand, "list all registered pathes");
 
     po::variables_map vm;
-    po::store(po::parse_command_line(argc, argv, desc), vm);
+    try
+    {
+        po::store(po::parse_command_line(argc, argv, desc), vm);
+    }
+    catch (po::invalid_command_line_syntax& e)
+    {
+        cout << "Invalid arguments";
+        return 1;
+    }
     po::notify(vm);
 
     int ret = 0;
     if (vm.count(kRegisterCommand))
     {
         auto args = vm[kRegisterCommand].as<vector<string>>();
-        PathManager pathManager;
-        pathManager.load(kConfigFileName);
-        pathManager.registerPath(args[0], args[1]);
-        pathManager.save(kConfigFileName);
+        if (args.size() >= 2)
+        {
+            PathManager pathManager;
+            pathManager.load(kConfigFileName);
+            pathManager.registerPath(args[0], args[1]);
+            pathManager.save(kConfigFileName);
+        }
+        else
+        {
+            cout << "Invalid arguments";
+        }
     }
     else if (vm.count(kSetCommand))
     {
