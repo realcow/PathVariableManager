@@ -1,5 +1,6 @@
 ﻿#include "pathmanager.h"
 #include <boost/program_options.hpp>
+#include <boost/filesystem.hpp>
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -11,6 +12,11 @@ const std::string kConfigFileName = "config.yml";
 
 int main(int argc, char** argv)
 {
+    // change current directory to the same location as executable
+    namespace filesystem = boost::filesystem;
+    filesystem::path execPath(argv[0]);
+    filesystem::current_path(execPath.parent_path());
+
     namespace po = boost::program_options;
     po::options_description desc("Allowed options");
     const char* kRegisterCommand = "register";

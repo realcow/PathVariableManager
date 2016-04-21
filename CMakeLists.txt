@@ -5,7 +5,7 @@ project(PathVariableManager)
 add_executable(PathVariableManager 
     pathmanager.h pathmanager.cpp
     main.cpp 
-    Readme.md)
+    pvm.bat Readme.md)
 if(MSVC)
   # make it use static runtime
   #foreach(config_name  ""  DEBUG  RELEASE  MINSIZEREL  RELWITHDEBINFO)
@@ -19,7 +19,7 @@ endif()
 
 # boost
 set(Boost_USE_STATIC_LIBS ON)
-find_package(Boost 1.48.0 COMPONENTS program_options)
+find_package(Boost 1.48.0 COMPONENTS program_options filesystem)
 include_directories(${Boost_INCLUDE_DIRS})
 target_link_libraries(PathVariableManager ${Boost_LIBRARIES})
 

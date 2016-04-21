@@ -1,8 +1,9 @@
 @ECHO OFF
 
 SET PVM_TEMPFILE=%TEMP%\PVM-TEMP-%DATE%-%RANDOM%.TMP
-
+PUSHD %~dp0
 PathVariableManager.exe %1 %2 %3 %4
+POPD
 
 :: 
 IF %ERRORLEVEL% == 9 (
