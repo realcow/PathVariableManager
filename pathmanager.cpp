@@ -79,3 +79,12 @@ boost::optional<std::string> PathManager::getPathByName(const std::string & name
     }
     return{};
 }
+
+void PathManager::enumerate(std::function<void(const std::string&, const std::vector<std::string>&)> callback)
+{
+    for (const auto& e : entries_)
+    {
+        callback(e.name, e.pathes);
+    }
+}
+
