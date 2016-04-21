@@ -36,7 +36,12 @@ int main(int argc, char** argv)
     {
         po::store(po::parse_command_line(argc, argv, desc), vm);
     }
-    catch (po::invalid_command_line_syntax& e)
+    catch (po::invalid_command_line_syntax&)
+    {
+        cout << "Invalid arguments";
+        return 1;
+    }
+    catch (po::unknown_option&)
     {
         cout << "Invalid arguments";
         return 1;
