@@ -62,6 +62,19 @@ bool PathManager::registerPath(const std::string& name, const std::string& path)
     return true;
 }
 
+bool PathManager::deregisterPath(const std::string& name)
+{
+    auto newEnd = std::remove_if(entries_.begin(), entries_.end(), [&name](Entry& entry) {
+        return entry.name == name;
+    });
+    if (entries_.end() == newEnd)
+    {
+        return false;
+    }
+    entries_.erase(newEnd);
+    return true;
+}
+
 boost::optional<std::string> PathManager::getPathByName(const std::string & name)
 {
     for (auto& e : entries_)

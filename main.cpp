@@ -20,11 +20,15 @@ int main(int argc, char** argv)
     namespace po = boost::program_options;
     po::options_description desc("Allowed options");
     const char* kRegisterCommand = "reg";
+    const char* kDeregisterCommand = "dereg";
     const char* kSetCommand = "set";
+    const char* kResetCommand = "reset";
     const char* kListCommand = "list";
     desc.add_options()
         (kRegisterCommand, po::value<vector<string>>()->multitoken(), "register path")
+        (kDeregisterCommand, po::value<vector<string>>()->multitoken(), "deregister path")
         (kSetCommand, po::value<string>(), "set path to current path variable by name")
+        (kResetCommand, po::value<string>(), "reset path")
         (kListCommand, "list all registered pathes");
 
     po::variables_map vm;
@@ -54,6 +58,14 @@ int main(int argc, char** argv)
         {
             cout << "Invalid arguments";
         }
+    }
+    else if (vm.count(kDeregisterCommand))
+    {
+        auto args = vm[kDeregisterCommand].as<vector<string>>();
+        PathManager pathManager;
+        pathManager.load(kConfigFileName);
+        pathManager.deregisterPath(args[0]);
+        pathManager.save(kConfigFileName);
     }
     else if (vm.count(kSetCommand))
     {
