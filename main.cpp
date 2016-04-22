@@ -23,12 +23,14 @@ int main(int argc, char** argv)
     const char* kDeregisterCommand = "dereg";
     const char* kSetCommand = "set";
     const char* kResetCommand = "reset";
+    const char* kCdCommand = "cd";
     const char* kListCommand = "list";
     desc.add_options()
         (kRegisterCommand, po::value<vector<string>>()->multitoken(), "register path")
         (kDeregisterCommand, po::value<vector<string>>()->multitoken(), "deregister path")
         (kSetCommand, po::value<string>(), "set path to current path variable by name")
         (kResetCommand, po::value<string>(), "reset path")
+        (kCdCommand, po::value<string>(), "change directory")
         (kListCommand, "list all registered pathes");
 
     po::variables_map vm;
@@ -114,6 +116,32 @@ int main(int argc, char** argv)
                 s.pop_back();
                 cout << name << " - " << s << endl;
             });
+        }
+    }
+    else if (vm.count(kCdCommand))
+    {
+        string name = vm[kCdCommand].as<string>();
+        PathManager pathManager;
+        if (pathManager.load(kConfigFileName))
+        {
+            auto path = pathManager.getPathByName(name);
+            if (path)
+            {
+                char* tempFilename = getenv("PVM_TEMPFILE");
+                if (tempFilename)
+                {
+                    ofstream fout(tempFilename);
+                    string dirToChange = *path;
+                    auto i = dirToChange.find(';');
+                    if (i != string::npos)
+                    {
+                        dirToChange.erase(i);
+                    }
+                    fout << "CD /D " << dirToChange;
+                    const int kErrorCodeRun = 8;
+                    ret = kErrorCodeRun;
+                }
+            }
         }
     }
     return ret;
