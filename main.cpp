@@ -25,13 +25,15 @@ int main(int argc, char** argv)
     const char* kResetCommand = "reset";
     const char* kCdCommand = "cd";
     const char* kListCommand = "list";
+    const char* kVerbose = "verbose";
     desc.add_options()
         (kRegisterCommand, po::value<vector<string>>()->multitoken(), "register path")
         (kDeregisterCommand, po::value<vector<string>>()->multitoken(), "deregister path")
         (kSetCommand, po::value<string>(), "set path to current path variable by name")
         (kResetCommand, po::value<string>(), "reset path")
         (kCdCommand, po::value<string>(), "change directory")
-        (kListCommand, "list all registered pathes");
+        (kListCommand, "list all registered pathes")
+        (kVerbose, "verbose");
 
     po::variables_map vm;
     try
@@ -50,6 +52,7 @@ int main(int argc, char** argv)
     }
     po::notify(vm);
 
+    bool verbose = (vm.count(kVerbose) != 0);
     int ret = 0;
     if (vm.count(kRegisterCommand))
     {
@@ -98,6 +101,13 @@ int main(int argc, char** argv)
                     fout << newPathVar;
                     const int kErrorCodeNewPath = 9;
                     ret = kErrorCodeNewPath;
+                    cout << "New path was added successfully!"
+                        << " (" << *path << ")" << endl;
+                    if (verbose)
+                    {
+                        cout << "Old path var: " << pathVar << endl
+                            << "New path var: " << newPathVar << endl;
+                    }
                 }
             }
         }
