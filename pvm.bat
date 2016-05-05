@@ -3,6 +3,10 @@
 :: has .bat extension for making it runnable
 SET PVM_TEMPFILE=%TEMP%\PVM-TEMP-%DATE%-%RANDOM%.bat
 PUSHD %~dp0
+IF NOT EXIST PathVariableManager.exe (
+	ECHO Error!
+	EXIT /B 1
+)
 PathVariableManager.exe %1 %2 %3 %4
 POPD
 
