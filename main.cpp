@@ -1,6 +1,7 @@
 ﻿#include "pathmanager.h"
 #include <boost/program_options.hpp>
 #include <boost/filesystem.hpp>
+#include <boost/algorithm/string.hpp>
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -87,26 +88,45 @@ int main(int argc, char** argv)
             if (path)
             {
                 char* pathVar = getenv("PATH");
-                string newPathVar = pathVar;
-                if (newPathVar.back() != ';')
+                
+                bool alreadyExists = false;
+                vector<string> tokens;
+                split(tokens, pathVar, boost::algorithm::is_any_of(";"), boost::algorithm::token_compress_on);
+                for (string& x : tokens)
                 {
-                    newPathVar.push_back(';');
-                }
-                newPathVar += path.get();
-
-                char* tempFilename = getenv("PVM_TEMPFILE");
-                if (tempFilename)
-                {
-                    ofstream fout(tempFilename);
-                    fout << newPathVar;
-                    const int kErrorCodeNewPath = 9;
-                    ret = kErrorCodeNewPath;
-                    cout << "New path was added successfully!"
-                        << " (" << *path << ")" << endl;
-                    if (verbose)
+                    if (boost::algorithm::iequals(x, *path))
                     {
-                        cout << "Old path var: " << pathVar << endl
-                            << "New path var: " << newPathVar << endl;
+                        alreadyExists = true;
+                        break;
+                    }
+                }
+                if (alreadyExists)
+                {
+                    cout << "Already exists!" << endl;
+                }
+                else
+                {
+                    string newPathVar = pathVar;
+                    if (newPathVar.back() != ';')
+                    {
+                        newPathVar.push_back(';');
+                    }
+                    newPathVar += path.get();
+
+                    char* tempFilename = getenv("PVM_TEMPFILE");
+                    if (tempFilename)
+                    {
+                        ofstream fout(tempFilename);
+                        fout << newPathVar;
+                        const int kErrorCodeNewPath = 9;
+                        ret = kErrorCodeNewPath;
+                        cout << "New path was added successfully!"
+                            << " (" << *path << ")" << endl;
+                        if (verbose)
+                        {
+                            cout << "Old path var: " << pathVar << endl
+                                << "New path var: " << newPathVar << endl;
+                        }
                     }
                 }
             }
